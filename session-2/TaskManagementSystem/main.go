@@ -25,7 +25,7 @@ func main() {
 
 	fmt.Println()
 
-	fmt.Printf("  Current project status: %s\n", projectStatus)
+	fmt.Printf("  Current project status: %s\n", strings.ToUpper(projectStatus))
 	fmt.Printf("  Tasks completed: %d out of %d\n", tasksCreated, tasksAvailable)
 	fmt.Printf("  Task priorities: %d-Low, %d-Medium, %d-High\n", low, medium, high)
 	fmt.Printf("  Is the project completed? %s\n", strconv.FormatBool(isCompleted))
