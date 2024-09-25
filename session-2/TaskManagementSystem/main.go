@@ -6,18 +6,18 @@ import (
 	"strings"
 )
 
+const (
+	low = iota
+	medium
+	high
+	tasksAvailable int = 100
+)
+
 func main() {
 	var (
 		projectStatus = "In Progress"
 		tasksCreated  = 25
 		isCompleted   = false
-	)
-
-	const (
-		low = iota
-		medium
-		high
-		tasksAvailable int = 100
 	)
 
 	fmt.Println("Welcome to the Task Management System!")
