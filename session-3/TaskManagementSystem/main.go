@@ -16,7 +16,7 @@ const (
 func main() {
 	var (
 		projectStatus   = "IN PROGRESS"
-		tasksCompleted  = 55
+		tasksCompleted  = 100
 		isCompleted     = false
 		tasksRemaining  = tasksAvailable - tasksCompleted
 		projectProgress = ""
@@ -24,6 +24,10 @@ func main() {
 
 	if tasksCompleted == tasksAvailable {
 		isCompleted = true
+	}
+
+	if tasksRemaining == 0 {
+		projectStatus = "FINISHED"
 	}
 
 	switch {
