@@ -181,3 +181,5 @@ fabric.properties
 # Go workspace file
 go.work
 
+# todo files
+todo.txt
