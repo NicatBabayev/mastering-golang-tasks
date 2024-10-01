@@ -33,7 +33,7 @@ func main() {
 	switch {
 	case tasksCompleted < 30:
 		projectProgress = "Starting phase"
-	case tasksCompleted >= 30 && tasksCompleted < 60:
+	case tasksCompleted >= 30 && tasksCompleted <= 60:
 		projectProgress = "Midway"
 	case tasksCompleted > 60:
 		projectProgress = "Final phase"
