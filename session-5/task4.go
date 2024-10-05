@@ -13,22 +13,14 @@ func main() {
 		five  = 5
 		six   = 6
 	)
+	fmt.Println("Before doubling:", one, two, three, four, five, six)
 	doubleVariadicElements(&one, &two, &three, &four, &five, &six)
+	fmt.Println("After doubling:", one, two, three, four, five, six)
 
-}
-
-func convertToNum(numbers ...*int) []int {
-	var arr []int
-	for i := range numbers {
-		arr = append(arr, *numbers[i])
-	}
-	return arr
 }
 
 func doubleVariadicElements(numbers ...*int) {
-	fmt.Println("Before doubling:", convertToNum(numbers...))
 	for i := range numbers {
 		*numbers[i] *= 2
 	}
-	fmt.Println("After doubling:", convertToNum(numbers...))
 }
