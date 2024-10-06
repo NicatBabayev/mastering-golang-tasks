@@ -40,36 +40,27 @@ func main() {
 	fmt.Println("  Project: Task Management System")
 
 	fmt.Println()
-	if tasksRemaining(tasksCompleted) >= 0 {
+	if c, _ := calculateTasksRemaining(tasksCompleted); c >= 0 {
 		fmt.Printf("  Tasks remaining %d out of %d.", tasksRemaining(tasksCompleted), tasksAvailable)
-		if _, f := isNearlyFinished(tasksCompleted); f {
+		if _, f := calculateTasksRemaining(tasksCompleted); f {
 			fmt.Println(" Project nearly finished.")
 		} else {
 			fmt.Println()
 		}
 		printProjectStatus(tasksCompleted)
-		if tasksRemaining(tasksCompleted) != 0 {
+		if c, _ := calculateTasksRemaining(tasksCompleted); c != 0 {
 			fmt.Printf("  Project is in the %s.\n", strings.ToLower(projectProgress))
 		}
 		fmt.Printf("  Task priorities: %d-Low, %d-Medium, %d-High\n", low, medium, high)
 		listTaskNums(tasksCompleted)
-		if tasksRemaining(tasksCompleted) != 0 {
+		if c, _ := calculateTasksRemaining(tasksCompleted); c != 0 {
 			fmt.Println("  Recursive countdown of remaining tasks:")
 		}
 		tasksRemainingRecursive(tasksCompleted)
 		statusCheck(tasksCompleted)
 
 		fmt.Printf("  Is the project completed? %v\n", isCompleted(tasksCompleted, tasksAvailable))
-		m := make(map[int]string)
-		m[1] = "One"
-		m[2] = "Two"
-		m[3] = "Three"
-		m[4] = "Four"
-		m[5] = "Five"
-		m[6] = "Six"
-		m[7] = "Seven"
 
-		printTaskDetails(m)
 	} else {
 		statusCheck(tasksCompleted)
 		fmt.Printf("  Is the project completed? %v\n", isCompleted(tasksCompleted, tasksAvailable))
@@ -88,7 +79,7 @@ func tasksRemaining(tasksCompleted int) int {
 }
 
 func listTaskNums(tasksCompleted int) {
-	if tasksRemaining(tasksCompleted) > 0 {
+	if c, _ := calculateTasksRemaining(tasksCompleted); c > 0 {
 		fmt.Println("  Task list: ")
 		for i := 1; i <= tasksCompleted; i++ {
 			fmt.Printf("  %d: Task %d\n", i, i)
@@ -100,7 +91,7 @@ func listTaskNums(tasksCompleted int) {
 func printProjectStatus(tasksCompleted int) {
 	var projectStatus string
 
-	if tasksRemaining(tasksCompleted) == 0 {
+	if c, _ := calculateTasksRemaining(tasksCompleted); c == 0 {
 		projectStatus = "FINISHED"
 	} else {
 		projectStatus = "IN PROGRESS"
@@ -109,9 +100,9 @@ func printProjectStatus(tasksCompleted int) {
 }
 
 func calculateTasksRemaining(tasksCompleted int) (int, bool) {
-    tasksRemaining := tasksAvailable - tasksCompleted
-    nearCompletion := tasksCompleted > 90
-    return tasksRemaining, nearCompletion
+	tasksRemaining := tasksAvailable - tasksCompleted
+	nearCompletion := tasksCompleted > 90
+	return tasksRemaining, nearCompletion
 }
 
 func tasksRemainingRecursive(tasksCompleted int) {
@@ -128,16 +119,12 @@ func tasksRemainingRecursive(tasksCompleted int) {
 	tasksRemainingRecursive(t)
 }
 
-
-    tasks := []string{"Task 1", "Task 2", "Task 3", "Task 4", "Task 5"}
-    printTasks(tasks...)
-    
-    // Variadic function to print any number of tasks
+// Variadic function to print any number of tasks
 func printTasks(tasks ...string) {
-    fmt.Println("Task list:")
-    for i, task := range tasks {
-        fmt.Printf("%d: %s\n", i+1, task)
-    }
+	fmt.Println("Task list:")
+	for i, task := range tasks {
+		fmt.Printf("%d: %s\n", i+1, task)
+	}
 }
 
 func statusCheck(tasksCompleted int) {
