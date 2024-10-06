@@ -128,14 +128,16 @@ func tasksRemainingRecursive(tasksCompleted int) {
 	tasksRemainingRecursive(t)
 }
 
-// Didn't understand the exact instructions for variadic function.
-func printTaskDetails(taskDetails ...map[int]string) {
-	fmt.Println()
-	for x := range taskDetails {
-		for k, v := range taskDetails[x] {
-			fmt.Printf("  Name of the task %d is: %s.\n", k, v)
-		}
-	}
+
+    tasks := []string{"Task 1", "Task 2", "Task 3", "Task 4", "Task 5"}
+    printTasks(tasks...)
+    
+    // Variadic function to print any number of tasks
+func printTasks(tasks ...string) {
+    fmt.Println("Task list:")
+    for i, task := range tasks {
+        fmt.Printf("%d: %s\n", i+1, task)
+    }
 }
 
 func statusCheck(tasksCompleted int) {
