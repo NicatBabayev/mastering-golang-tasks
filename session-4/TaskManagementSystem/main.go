@@ -108,15 +108,10 @@ func printProjectStatus(tasksCompleted int) {
 	fmt.Printf("  Current project status: %s\n", projectStatus)
 }
 
-func isNearlyFinished(tasksCompleted int) (int, bool) {
-	var isNearlyFinished bool
-	if tasksCompleted > 90 && tasksCompleted != 100 {
-		isNearlyFinished = true
-	} else {
-		isNearlyFinished = false
-	}
-
-	return tasksRemaining(tasksCompleted), isNearlyFinished
+func calculateTasksRemaining(tasksCompleted int) (int, bool) {
+    tasksRemaining := tasksAvailable - tasksCompleted
+    nearCompletion := tasksCompleted > 90
+    return tasksRemaining, nearCompletion
 }
 
 func tasksRemainingRecursive(tasksCompleted int) {
