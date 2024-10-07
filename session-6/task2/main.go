@@ -18,6 +18,6 @@ func main() {
 
 	// Show effect of append()
 	fmt.Println("Original array after manipulations:", arr)
-	fmt.Println("Print original array: modified based on capacity")
+	fmt.Println("Print original array: modified based on capacity:", slc)
 
 }
