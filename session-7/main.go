@@ -7,7 +7,6 @@ import (
 	"session-7/model/structs"
 )
 
-// #TODO Write required comments
 func main() {
 	// Task 1
 	book := structs.Book{
