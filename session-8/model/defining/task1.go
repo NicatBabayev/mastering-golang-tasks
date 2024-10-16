@@ -25,6 +25,6 @@ func (r Rectangle) Area() float64 {
 	return r.Height * r.Width
 }
 
-func AreaOfShape(shape Shape) interface{} {
+func AreaOfShape(shape Shape) float64 {
 	return shape.Area()
 }
