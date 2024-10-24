@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"session-9/task/authsystem"
 	"session-9/task/custerr"
 	"session-9/task/wrapper"
 )
@@ -37,7 +38,7 @@ func main() {
 	if err3 != nil {
 		fmt.Print(fmt.Errorf("Wrapped Error: %w", err3))
 		fmt.Println()
-		fmt.Print(fmt.Errorf("Original Error: %w", errors.Unwrap(err3)))
+		fmt.Println(fmt.Errorf("Original Error: %w", errors.Unwrap(err3)))
 	}
 
 	fmt.Println()
@@ -46,7 +47,12 @@ func main() {
 	fmt.Println("// Task 4")
 	err4 := wrapper.OpenFile2("nonexistent.txt")
 	if err4 != nil {
-		fmt.Print(fmt.Errorf("error: %w", err4))
+		fmt.Println(fmt.Errorf("error: %w", err4))
 	}
 
+	fmt.Println()
+
+	// Task 5
+	fmt.Println("// Task 5")
+	authsystem.RunTask5()
 }
