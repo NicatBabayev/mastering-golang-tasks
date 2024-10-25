@@ -14,7 +14,7 @@ func RunTask4() {
 	}()
 	go sendToChannel1([]int{1, 2, 3, 4, 5}, ch)
 	numbers := <-ch
-	for number := range numbers {
-		fmt.Println(number + 1)
+        for _, v := range numbers {
+		fmt.Println(v)
 	}
 }
