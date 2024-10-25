@@ -183,3 +183,6 @@ go.work
 
 # todo files
 todo.txt
+
+# VSCode files
+.vscode
