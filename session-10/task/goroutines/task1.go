@@ -16,6 +16,6 @@ func printNumbers() {
 func RunTask1() {
 	fmt.Println("Main function started")
 	go printNumbers()
-	fmt.Println("Main function ended")
 	time.Sleep(time.Second)
+	fmt.Println("Main function ended")
 }
