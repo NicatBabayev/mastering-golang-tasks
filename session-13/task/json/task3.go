@@ -20,7 +20,6 @@ func parseJSON(fileName string) []students {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(student)
 
 	return student
 }

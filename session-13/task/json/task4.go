@@ -25,8 +25,6 @@ func parseJSON2(fileName string) config {
 		fmt.Println(err)
 	}
 
-	fmt.Println(config)
-
 	return config
 }
 
