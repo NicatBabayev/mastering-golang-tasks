@@ -33,6 +33,7 @@ func BorrowBook(userID int, bookID int, db *DB) error {
 func ReturnBook(userID int, bookID int, db *DB) error {
 	userIndex, _ := db.GetUserByID(userID)
 	bookIndex, book := db.GetBookByID(bookID)
+	bIndexInBorrowedBooks := -1
 	if userIndex == -1 {
 		return fmt.Errorf("requested user doesn't exist.")
 	}
@@ -42,8 +43,13 @@ func ReturnBook(userID int, bookID int, db *DB) error {
 	if book.Status == "available" {
 		return fmt.Errorf("requested book \"%s\" has not booked yet.", book.Title)
 	}
+	for i, j := range db.users[userIndex].BorrowedBooks {
+		if j == bookID {
+			bIndexInBorrowedBooks = i
+		}
+	}
 
-	db.users[userIndex].BorrowedBooks = append(db.users[userIndex].BorrowedBooks[:bookIndex], db.users[userIndex].BorrowedBooks[bookIndex+1:]...)
+	db.users[userIndex].BorrowedBooks = append(db.users[userIndex].BorrowedBooks[:bIndexInBorrowedBooks], db.users[userIndex].BorrowedBooks[bIndexInBorrowedBooks+1:]...)
 	db.users[userIndex].BorrowLimit--
 	db.books[bookIndex].Status = "available"
 
