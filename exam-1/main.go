@@ -1,6 +1,6 @@
 package main
 
-import "rental-system/app"
+import "exam-1/app"
 
 func main() {
 	app.Run()

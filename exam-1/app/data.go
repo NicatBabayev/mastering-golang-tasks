@@ -1,7 +1,5 @@
 package app
 
-import "fmt"
-
 func LoadInitialData(db *DB) {
 	books := []Book{
 		{
@@ -70,61 +68,40 @@ func LoadInitialData(db *DB) {
 			UserID:        1,
 			Name:          "Ali",
 			BorrowedBooks: []int{},
-			BorrowLimit:   3,
+			BorrowLimit:   0,
 		},
 		{
 			UserID:        2,
 			Name:          "Babek",
 			BorrowedBooks: []int{},
-			BorrowLimit:   3,
+			BorrowLimit:   0,
 		},
 		{
 			UserID:        3,
 			Name:          "Cabir",
 			BorrowedBooks: []int{},
-			BorrowLimit:   3,
+			BorrowLimit:   0,
 		},
 		{
 			UserID:        4,
 			Name:          "Diana",
 			BorrowedBooks: []int{},
-			BorrowLimit:   3,
+			BorrowLimit:   0,
 		},
 		{
 			UserID:        5,
 			Name:          "Elvira",
 			BorrowedBooks: []int{},
-			BorrowLimit:   3,
+			BorrowLimit:   0,
 		},
 	}
 	for _, book := range books {
-		err := db.addBook(book)
-		if err != nil {
-			fmt.Println(fmt.Errorf("load initial data error: %w", err))
-		}
+		db.AddBook(book)
 	}
 	for _, user := range users {
-		err := db.addUser(user)
-		if err != nil {
-			fmt.Println(fmt.Errorf("load initial data error: %w", err))
-		}
+		db.AddUser(user)
 	}
-
 }
+
 func DisplayData(db *DB) {
-	fmt.Println("1. Available Books: ")
-	for _, book := range db.books {
-		fmt.Printf("  - \"%s\" by %s\n", book.Title, book.Author)
-	}
-	fmt.Println("2. Borrowed Books by Users: ")
-	for _, user := range db.users {
-		fmt.Printf("  - User %d (%s):\n", user.UserID, user.Name)
-		if len(user.BorrowedBooks) != 0 {
-			for _, borrowedBookID := range user.BorrowedBooks {
-				book, _ := db.searchBookByID(borrowedBookID)
-				fmt.Printf("    - \"%s\" by %s", book.Title, book.Author)
-			}
-		}
-	}
-	fmt.Println("End of Report.")
 }

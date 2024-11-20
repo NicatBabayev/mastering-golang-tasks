@@ -7,113 +7,107 @@ type DB struct {
 	users []User
 }
 
-// Book related methods
-func (db *DB) addBook(book Book) error {
-	index, err := db.searchBook(book)
+// User related methods
+func (db *DB) GetUserByID(userID int) (int, User) {
+	index := -1
+	var res User
+	for i, user := range db.users {
+		if user.UserID == userID {
+			index = i
+			res = user
+		}
+	}
 	if index != -1 {
-		return fmt.Errorf("addBook error: %w", err)
+		return index, res
+	} else {
+		return -1, User{}
+	}
+}
+
+func (db *DB) GetAllUsers() []User {
+	return db.users
+}
+
+func (db *DB) AddUser(user User) error {
+	index, _ := db.GetUserByID(user.UserID)
+	if index != -1 {
+		return fmt.Errorf("requested user already exists in database.")
+	}
+	db.users = append(db.users, user)
+	return nil
+}
+
+func (db *DB) RemoveUser(user User) error {
+	index, _ := db.GetUserByID(user.UserID)
+
+	if index == -1 {
+		return fmt.Errorf("requested user doesn't exist in database.")
+	}
+	db.users = append(db.users[:index], db.users[index+1:]...)
+	return nil
+}
+
+// Book related methods
+func (db *DB) GetAllBooks() []Book {
+	return db.books
+}
+
+func (db *DB) GetAllBorrowedBooks() []Book {
+	borrowedBooks := make([]Book, 0)
+	for _, book := range db.books {
+		if book.Status == "borrowed" {
+			borrowedBooks = append(borrowedBooks, book)
+		}
+	}
+	return borrowedBooks
+}
+
+func (db *DB) GetAvailableBooks() []Book {
+	availableBooks := make([]Book, 0)
+	for _, book := range db.books {
+		if book.Status == "available" {
+			availableBooks = append(availableBooks, book)
+		}
+	}
+	return availableBooks
+}
+
+func (db *DB) GetBorrowedBooksByUserID(userID int) []int {
+	index, user := db.GetUserByID(userID)
+	if index != -1 {
+		return user.BorrowedBooks
+	}
+	return []int{}
+}
+
+func (db *DB) GetBookByID(bookID int) (int, Book) {
+	index := -1
+	var res Book
+	for i, book := range db.books {
+		if book.BookID == bookID {
+			index = i
+			res = book
+		}
+	}
+	if index != -1 {
+		return index, res
+	} else {
+		return -1, Book{}
+	}
+}
+func (db *DB) AddBook(book Book) error {
+	index, _ := db.GetBookByID(book.BookID)
+	if index != -1 {
+		return fmt.Errorf("requested book already exists in database.")
 	}
 	db.books = append(db.books, book)
 	return nil
 }
-func (db *DB) removeBook(book Book) error {
-	index, err := db.searchBook(book)
-	if index != -1 {
-		db.books = append(db.books[:index], db.books[index+1:]...)
-		return nil
-	}
-	return fmt.Errorf("removeUser err: %w", err)
-}
-func (db *DB) searchBook(book Book) (int, error) {
-	for i, j := range db.books {
-		if j.BookID == book.BookID {
-			return i, nil
-		}
-	}
-	return -1, fmt.Errorf("Requested book didn't found")
-}
-func (db *DB) searchBookByID(bookID int) (Book, error) {
-	for _, j := range db.books {
-		if j.BookID == bookID {
-			return j, nil
-		}
-	}
-	return Book{}, fmt.Errorf("Requested book didn't found.")
-}
-func (db *DB) listAllBooks() {
-	fmt.Println("Books: ")
-	for _, j := range db.books {
-		fmt.Printf("BookID: %d;\t Title: %s;\t Author: %s;\t Status: %s;\n", j.BookID, j.Title, j.Author, j.Status)
-	}
-}
-func (db *DB) listAvailableBooks() {
-	fmt.Println("Books: ")
-	for _, j := range db.books {
-		if j.Status == "available" {
-			fmt.Printf("BookID: %d;\t Title: %s;\t Author: %s;\t Status: %s;\n", j.BookID, j.Title, j.Author, j.Status)
-		}
-	}
-}
-func (db *DB) returnAvailableBooks() []Book {
-	res := make([]Book, 0)
-	for _, j := range db.books {
-		if j.Status == "available" {
-			res = append(res, j)
-		}
-	}
-	return res
-}
-func (db *DB) listBorrowedBooks() {
-
-	fmt.Println("Borrowed books: ")
-	for _, j := range db.books {
-		if j.Status == "borrowed" {
-			fmt.Printf("BookID: %d;\t Title: %s;\t Author: %s;\t Status: %s;\t", j.BookID, j.Title, j.Author, j.Status)
-		}
-	}
-}
-
-// User related methods
-func (db *DB) addUser(user User) error {
-	index, err := db.searchUser(user)
+func (db *DB) RemoveBook(book Book) error {
+	index, _ := db.GetBookByID(book.BookID)
 	if index == -1 {
-		db.users = append(db.users, user)
-		return nil
+		return fmt.Errorf("requested book doesn't exist in database.")
 	}
-	return fmt.Errorf("addUser error: %w", err)
-
-}
-func (db *DB) removeUser(user User) error {
-	index, err := db.searchUser(user)
-	if index != -1 {
-		db.users = append(db.users[:index], db.users[index+1:]...)
-		return nil
-	}
-	return fmt.Errorf("removeUser err: %w", err)
-
-}
-func (db *DB) searchUser(user User) (int, error) {
-	for i, j := range db.users {
-		if j.UserID == user.UserID {
-			return i, nil
-		}
-	}
-	return -1, fmt.Errorf("Requested user didn't found")
-}
-func (db *DB) searchUserByID(userID int) (User, error) {
-	for _, j := range db.users {
-		if j.UserID == userID {
-			return j, nil
-		}
-	}
-	return User{}, fmt.Errorf("Requested user didn't found.")
-
-}
-
-func (db *DB) listAllUsers() {
-	fmt.Print("Users: \n")
-	for _, j := range db.users {
-		fmt.Printf(" UserID: %d;\t Name: %s;\t BorrowedBooks: %v;\n ", j.UserID, j.Name, j.BorrowedBooks)
-	}
-
+	db.books = append(db.books[:index], db.books[index+1:]...)
+	return nil
 }
