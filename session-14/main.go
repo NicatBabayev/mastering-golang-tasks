@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"session-14/task/benchmarking"
+	"session-14/task/mocking"
 	"session-14/task/table_driven"
 	"session-14/task/unit_testing"
 )
@@ -41,4 +42,16 @@ func main() {
 	// Task6
 	fmt.Println("// Task6")
 	benchmarking.RunTask6()
+
+	fmt.Println()
+
+	// Task7
+	fmt.Println("// Task7")
+	mocking.RunTask7()
+
+	fmt.Println()
+
+	// Task8
+	fmt.Println("// Task8")
+	mocking.RunTask8()
 }
