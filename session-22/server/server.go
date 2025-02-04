@@ -1,11 +1,13 @@
 package server
 
 import (
-	_ "gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"net/http"
 	"session-22/config"
 	"session-22/handlers"
+	"session-22/middleware"
+
+	_ "gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 type Server struct {
@@ -21,8 +23,10 @@ func (s *Server) Start() error {
 	if err != nil {
 		return err
 	}
-	handler := handlers.NewHandler(s.DB)
-	http.HandleFunc("/books/", handler.BooksHandler)
+	bookHandler := handlers.NewBooksHandler(s.DB)
+	loginHandler := handlers.NewLoginHandler()
+	http.HandleFunc("/books/", middleware.Authenticate(bookHandler.BooksHandler))
+	http.HandleFunc("/login/", loginHandler.LoginHandler)
 	srvPort := srvConfig["SRV_PORT"]
 	err = http.ListenAndServe(":"+srvPort, nil)
 	if err != nil {

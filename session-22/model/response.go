@@ -9,3 +9,7 @@ type BookResponse struct {
 	Price         float64   `json:"price" gorm:"decimal(10,2)"`
 	PublishedYear time.Time `json:"published_year"`
 }
+
+type LoginResponse struct {
+	Token string `json:"accessToken"`
+}

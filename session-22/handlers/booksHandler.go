@@ -3,23 +3,24 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"gorm.io/gorm"
 	"io"
 	"net/http"
 	"session-22/model"
 	"strconv"
 	"strings"
+
+	"gorm.io/gorm"
 )
 
-type Handler struct {
+type BooksHandler struct {
 	db *gorm.DB
 }
 
-func NewHandler(db *gorm.DB) *Handler {
-	return &Handler{db: db}
+func NewBooksHandler(db *gorm.DB) *BooksHandler {
+	return &BooksHandler{db: db}
 }
 
-func (h *Handler) BooksHandler(w http.ResponseWriter, r *http.Request) {
+func (h *BooksHandler) BooksHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		h.getBooksHandler(w, r)
@@ -35,7 +36,7 @@ func (h *Handler) BooksHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Handlers
-func (h *Handler) getBooksHandler(w http.ResponseWriter, r *http.Request) {
+func (h *BooksHandler) getBooksHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	pathParts := strings.Split(path[1:], "/")
 	// Filter out empty strings
@@ -65,7 +66,7 @@ func (h *Handler) getBooksHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-func (h *Handler) postBooksHandler(w http.ResponseWriter, r *http.Request) {
+func (h *BooksHandler) postBooksHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	pathParts := strings.Split(path[1:], "/")
 	var book *model.BookRequest
@@ -98,7 +99,7 @@ func (h *Handler) postBooksHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-func (h *Handler) deleteBooksHandler(w http.ResponseWriter, r *http.Request) {
+func (h *BooksHandler) deleteBooksHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	pathParts := strings.Split(path[1:], "/")
 
@@ -110,7 +111,7 @@ func (h *Handler) deleteBooksHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-func (h *Handler) putBooksHandler(w http.ResponseWriter, r *http.Request) {
+func (h *BooksHandler) putBooksHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	pathParts := strings.Split(path[1:], "/")
 	var book *model.BookRequest
@@ -134,14 +135,14 @@ func (h *Handler) putBooksHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Handle Methods
-func (h *Handler) findBookID(book *model.BookRequest) (int, error) {
+func (h *BooksHandler) findBookID(book *model.BookRequest) (int, error) {
 	var bookResult model.BookResponse
 	if err := h.db.Where("title = ?", book.Title).First(&bookResult).Error; err != nil {
 		return -1, err
 	}
 	return int(bookResult.ID), nil
 }
-func (h *Handler) getAllBooks() (*[]model.BookResponse, error) {
+func (h *BooksHandler) getAllBooks() (*[]model.BookResponse, error) {
 	var books []model.BookResponse
 	err := h.db.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Table("book").Find(&books).Error; err != nil {
@@ -154,7 +155,7 @@ func (h *Handler) getAllBooks() (*[]model.BookResponse, error) {
 	}
 	return &books, nil
 }
-func (h *Handler) getBookByID(id int) *model.BookResponse {
+func (h *BooksHandler) getBookByID(id int) *model.BookResponse {
 	var resBook *model.BookResponse
 
 	h.db.Transaction(func(tx *gorm.DB) error {
@@ -166,7 +167,7 @@ func (h *Handler) getBookByID(id int) *model.BookResponse {
 
 	return resBook
 }
-func (h *Handler) addBook(book *model.BookRequest) error {
+func (h *BooksHandler) addBook(book *model.BookRequest) error {
 	err := h.db.Transaction(func(tx *gorm.DB) error {
 		tx.Table("book").Create(&book)
 		return nil
@@ -176,7 +177,7 @@ func (h *Handler) addBook(book *model.BookRequest) error {
 	}
 	return nil
 }
-func (h *Handler) addBookByID(id int, book *model.BookRequest) error {
+func (h *BooksHandler) addBookByID(id int, book *model.BookRequest) error {
 	err := h.db.Transaction(func(tx *gorm.DB) error {
 		book.ID = uint(id)
 		tx.Table("book").Create(&book)
@@ -187,7 +188,7 @@ func (h *Handler) addBookByID(id int, book *model.BookRequest) error {
 	}
 	return nil
 }
-func (h *Handler) deleteBookByID(id int) error {
+func (h *BooksHandler) deleteBookByID(id int) error {
 	err := h.db.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Table("book").Delete(&model.BookRequest{}, id).Error; err != nil {
 			return err
@@ -200,7 +201,7 @@ func (h *Handler) deleteBookByID(id int) error {
 
 	return nil
 }
-func (h *Handler) updateBookByID(id int, book *model.BookRequest) error {
+func (h *BooksHandler) updateBookByID(id int, book *model.BookRequest) error {
 	var currentBook *model.BookResponse
 	currentBook = h.getBookByID(id)
 	currentBook.Title = book.Title

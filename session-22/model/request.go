@@ -11,3 +11,8 @@ type BookRequest struct {
 	Price         float64   `json:"price" gorm:"decimal(10,2)"`
 	PublishedYear time.Time `json:"published_year"`
 }
+
+type LoginRequest struct {
+	UserName string `json:"username"`
+	Password string `json:"password"`
+}
