@@ -1,19 +1,30 @@
 package server
 
 import (
+	_ "gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"net/http"
 	"session-22/config"
 	"session-22/handlers"
 )
 
-func Init() error {
-	srvConf, err := config.ParseSrvConfig()
-	port := srvConf["SRV_PORT"]
+type Server struct {
+	DB *gorm.DB
+}
+
+func NewServer(db *gorm.DB) *Server {
+	return &Server{DB: db}
+}
+
+func (s *Server) Start() error {
+	srvConfig, err := config.ParseSrvConfig()
 	if err != nil {
 		return err
 	}
-	http.HandleFunc("/books/", handlers.BooksHandler)
-	err = http.ListenAndServe(":"+port, nil)
+	handler := handlers.NewHandler(s.DB)
+	http.HandleFunc("/books", handler.BooksHandler)
+	srvPort := srvConfig["SRV_PORT"]
+	err = http.ListenAndServe(":"+srvPort, nil)
 	if err != nil {
 		return err
 	}

@@ -13,3 +13,7 @@ type Book struct {
 	PublishedYear time.Time
 	gorm.Model
 }
+
+func (Book) TableName() string {
+	return "book"
+}

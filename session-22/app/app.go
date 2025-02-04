@@ -7,12 +7,13 @@ import (
 
 func Init() error {
 	//	init db
-	_, err := db.NewConnection()
+	dbCon, err := db.NewConnection()
 	if err != nil {
 		return err
 	}
 	//	init server
-	err = server.Init()
+	srv := server.NewServer(dbCon)
+	err = srv.Start()
 	if err != nil {
 		return err
 	}

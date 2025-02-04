@@ -5,6 +5,7 @@ import (
 	_ "gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"session-22/config"
+	"session-22/model"
 )
 
 type Postgres struct{}
@@ -35,7 +36,11 @@ func NewConnection() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	err = db.AutoMigrate(&model.Book{})
+	if err != nil {
+		return nil, err
+	}
+
 	return db, nil
-	// return the result of connection(either error or db instance)
 
 }
