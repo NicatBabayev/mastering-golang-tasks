@@ -22,7 +22,7 @@ func (s *Server) Start() error {
 		return err
 	}
 	handler := handlers.NewHandler(s.DB)
-	http.HandleFunc("/books", handler.BooksHandler)
+	http.HandleFunc("/books/", handler.BooksHandler)
 	srvPort := srvConfig["SRV_PORT"]
 	err = http.ListenAndServe(":"+srvPort, nil)
 	if err != nil {
